@@ -40,7 +40,7 @@ def find_last_occurrence(lst, element):
             return i
     return -1
 
-move_n = 0
+move_n = 1
 def move_piece(Towers, start, stop):
     global move_n
     piece = ""
