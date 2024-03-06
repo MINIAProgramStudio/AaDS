@@ -1,8 +1,6 @@
-import PythonTableConsole
 import copy
-import math
 import random
-
+import time
 
 def unsortgen(length):
     unsorted_list = list(range(length))
@@ -48,3 +46,22 @@ def shells_sort(input_list):
                 list_to_sort[ii * hk[iteration] + i] = sublist[ii]
     return [list_to_sort,compared,moved]
 
+print('Сортування списку довжини 100')
+unsorted_list = unsortgen(100)
+print('Список: '+str(unsorted_list))
+start = time.time()
+sel_sor_100 = selections_sort(unsorted_list)
+end = time.time()
+sel_sor_100.append(end-start)
+start = time.time()
+she_sor_100 = shells_sort(unsorted_list)
+end = time.time()
+she_sor_100.append(end-start)
+print('Сортування методом вибору:')
+print('Порівнянь: '+str(sel_sor_100[1]))
+print('Обмінів: '+str(sel_sor_100[2]))
+print('Час виконання: '+str(sel_sor_100[3]))
+print('Сортування методом Шелла:')
+print('Порівнянь: '+str(she_sor_100[1]))
+print('Обмінів: '+str(she_sor_100[2]))
+print('Час виконання: '+str(she_sor_100[3]))
