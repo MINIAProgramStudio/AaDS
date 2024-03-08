@@ -37,13 +37,14 @@ def shells_sort(input_list):
             break
     for iteration in range(len(hk)):
         for i in range(hk[iteration]):
-            sublist = list_to_sort[slice(i, len(list_to_sort), hk[iteration])]
-            sort_result = selections_sort(sublist)
-            compared += sort_result[1]
-            moved += sort_result[2]
-            sublist = sort_result[0]
-            for ii in range(len(sublist)):
-                list_to_sort[ii * hk[iteration] + i] = sublist[ii]
+            sublist = slice(i, len(list_to_sort), hk[iteration])
+            for ii in range(len(list_to_sort[sublist])):
+                minimum = min(list_to_sort[sublist][ii:])
+                compared += len(list_to_sort[sublist][ii:])
+                index_of_minimum = list_to_sort[sublist].index(minimum)*hk[iteration]+i
+                index_of_start = i+ii*hk[iteration]
+                list_to_sort[index_of_minimum], list_to_sort[index_of_start] = list_to_sort[index_of_start], list_to_sort[index_of_minimum]
+                moved+=1
     return [list_to_sort,compared,moved]
 
 print('Сортування списку довжини 100')
@@ -58,6 +59,8 @@ del(end)
 start = time.time()
 she_sor_100 = shells_sort(unsorted_list)
 end = time.time()
+print('Сортований список:')
+print(she_sor_100[0])
 she_sor_100.append(end-start)
 del(start)
 del(end)
@@ -115,7 +118,7 @@ print('Сортування методом Шелла:')
 print('Порівнянь: '+str(she_sor_10k[1]))
 print('Обмінів: '+str(she_sor_10k[2]))
 print('Час виконання: '+str(she_sor_10k[3]))
-
+"""
 print('Сортування списку довжини 100k')
 unsorted_list = unsortgen(100000)
 start = time.time()
@@ -138,3 +141,4 @@ print('Сортування методом Шелла:')
 print('Порівнянь: '+str(she_sor_100k[1]))
 print('Обмінів: '+str(she_sor_100k[2]))
 print('Час виконання: '+str(she_sor_100k[3]))
+"""
