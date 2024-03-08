@@ -12,18 +12,24 @@ def unsortgen(length):
 
 def insertions_sort(input_list):
     list_to_sort = copy.copy(input_list)
+    compared = 0
+    moved = 0
+
     for i in range(len(list_to_sort)):
         inserted = False
         for ii in range(i-1,-1,-1):
+            compared += 1
             if list_to_sort[i] >= list_to_sort[ii]:
+                moved+=1
                 list_to_sort.insert(ii+1, list_to_sort[i])
                 list_to_sort.pop(i + 1)
                 inserted=True
                 break
         if not inserted:
+            moved+=1
             list_to_sort.insert(0, list_to_sort[i])
             list_to_sort.pop(i+1)
-    return list_to_sort
+    return [list_to_sort, compared, moved]
 
 def selections_sort(input_list):
     compared = 0
@@ -52,25 +58,17 @@ def shells_sort(input_list):
     for gap in hk:
         for offset in range(gap):
             sublist = list_to_sort[slice(offset, len(list_to_sort), gap)]
-            print('before:')
-            print(sublist)
-            for unsorted_element in range(0,len(sublist)):
-                inserted = False
-                for sorted_element in range(unsorted_element):
-                    if sublist[unsorted_element] < sublist[sorted_element]:
-                        sublist.insert(sorted_element, sublist[unsorted_element])
-                        sublist.pop(unsorted_element+1)
-
-                if not inserted:
-                    sublist.append(sublist[unsorted_element])
-                    sublist.pop(unsorted_element)
-            print('after:')
-            print(sublist)
+            sorted = insertions_sort(sublist)
+            compared += sorted[1]
+            moved += sorted[2]
+            sublist = sorted[0]
+            for i in range(len(sublist)):
+                list_to_sort[offset+gap*i] = sublist[i]
 
     return [list_to_sort,compared,moved]
 
 print('Сортування списку довжини 100')
-unsorted_list = unsortgen(10)
+unsorted_list = unsortgen(100)
 print('Список: '+str(unsorted_list))
 start = time.time()
 sel_sor_100 = selections_sort(unsorted_list)
@@ -94,7 +92,8 @@ print('Сортування методом Шелла:')
 print('Порівнянь: '+str(she_sor_100[1]))
 print('Обмінів: '+str(she_sor_100[2]))
 print('Час виконання: '+str(she_sor_100[3]))
-"""
+print()
+
 print('Сортування списку довжини 1000')
 unsorted_list = unsortgen(1000)
 start = time.time()
@@ -117,6 +116,7 @@ print('Сортування методом Шелла:')
 print('Порівнянь: '+str(she_sor_1k[1]))
 print('Обмінів: '+str(she_sor_1k[2]))
 print('Час виконання: '+str(she_sor_1k[3]))
+print()
 
 print('Сортування списку довжини 10k')
 unsorted_list = unsortgen(10000)
@@ -140,28 +140,3 @@ print('Сортування методом Шелла:')
 print('Порівнянь: '+str(she_sor_10k[1]))
 print('Обмінів: '+str(she_sor_10k[2]))
 print('Час виконання: '+str(she_sor_10k[3]))
-"""
-"""
-print('Сортування списку довжини 100k')
-unsorted_list = unsortgen(100000)
-start = time.time()
-sel_sor_100k = selections_sort(unsorted_list)
-end = time.time()
-sel_sor_100k.append(end-start)
-del(start)
-del(end)
-start = time.time()
-she_sor_100k = shells_sort(unsorted_list)
-end = time.time()
-she_sor_100k.append(end-start)
-del(start)
-del(end)
-print('Сортування методом вибору:')
-print('Порівнянь: '+str(sel_sor_100k[1]))
-print('Обмінів: '+str(sel_sor_100k[2]))
-print('Час виконання: '+str(sel_sor_100k[3]))
-print('Сортування методом Шелла:')
-print('Порівнянь: '+str(she_sor_100k[1]))
-print('Обмінів: '+str(she_sor_100k[2]))
-print('Час виконання: '+str(she_sor_100k[3]))
-"""
