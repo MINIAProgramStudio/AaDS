@@ -15,20 +15,19 @@ def insertions_sort(input_list):
     compared = 0
     moved = 0
 
-    for i in range(len(list_to_sort)):
-        inserted = False
+    for i in range(1,len(list_to_sort)):
+        key = list_to_sort[i]
+        key_pos = i
         for ii in range(i-1,-1,-1):
             compared += 1
-            if list_to_sort[i] >= list_to_sort[ii]:
-                moved+=1
-                list_to_sort.insert(ii+1, list_to_sort[i])
-                list_to_sort.pop(i + 1)
-                inserted=True
+            if key >= list_to_sort[ii]:
                 break
-        if not inserted:
-            moved+=1
-            list_to_sort.insert(0, list_to_sort[i])
-            list_to_sort.pop(i+1)
+            else:
+                list_to_sort[ii+1] = list_to_sort[ii]
+                moved+=1
+                key_pos -= 1
+        list_to_sort[key_pos] = key
+        moved+=1
     return [list_to_sort, compared, moved]
 
 def selections_sort(input_list):
@@ -57,13 +56,19 @@ def shells_sort(input_list):
             break
     for gap in hk:
         for offset in range(gap):
-            sublist = list_to_sort[slice(offset, len(list_to_sort), gap)]
-            sorted = insertions_sort(sublist)
-            compared += sorted[1]
-            moved += sorted[2]
-            sublist = sorted[0]
-            for i in range(len(sublist)):
-                list_to_sort[offset+gap*i] = sublist[i]
+            for iter in range(1, int(len(list_to_sort)/gap)):
+                key = list_to_sort[iter*gap+offset]
+                key_pos = iter
+                for ii in range(iter - 1, -1, -1):
+                    compared += 1
+                    if key >= list_to_sort[ii*gap+offset]:
+                        break
+                    else:
+                        list_to_sort[ii*gap+offset + gap] = list_to_sort[ii*gap+offset]
+                        moved += 1
+                        key_pos -= 1
+                list_to_sort[key_pos*gap+offset] = key
+                moved += 1
 
     return [list_to_sort,compared,moved]
 
