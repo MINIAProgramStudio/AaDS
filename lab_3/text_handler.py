@@ -31,8 +31,10 @@ class DoubleLinkedList:
     def update(self):
         self.length = 0
         selected_node = self.first_node
-        while selected_node:
+        while not selected_node is None:
             self.length += 1
+            if selected_node.next is None:
+                break
             selected_node = selected_node.next
         if self.last_node == self.first_node and self.length > 1:
             self.last_node = selected_node
@@ -64,15 +66,30 @@ class DoubleLinkedList:
     def pop(self):
         if self.length < 1:
             self.update()
-        if self.length == 0 or self.first_node is None:
+        if self.length == 0 or self.last_node is None:
             raise Exception("cannot pop from empty list")
-        popped_node = self.first_node
-        self.first_node = self.first_node.next
-        self.first_node.previous = None
+        popped_node = self.last_node
+        self.last_node = self.last_node.previous
+        self.last_node.next = None
         self.update()
         return popped_node
 
-    def remove(self, index=0):
+    def pull(self):
+        if len(self) < 1:
+            self.update()
+        if self.length == 0 or self.first_node is None:
+            raise Exception("cannot pull from empty list")
+        pulled_node = self.first_node
+        self.first_node = self.first_node.next
+        self.first_node.previous = None
+        self.update()
+        return pulled_node
+
+    def pop(self, index):
+        if index == self.length - 1:
+            return self.pop()
+        if index == 0:
+            return self.pull()
         if index >= self.length:
             raise Exception("index out of range")
         if index < self.length / 2:
@@ -132,7 +149,7 @@ class DoubleLinkedList:
                 selected_node = selected_node.next
         else:
             selected_node = self.last_node
-            for i in range(0, self.length - item):
+            for i in range(0, self.length - item - 1):
                 selected_node = selected_node.previous
         return selected_node
 
@@ -145,7 +162,15 @@ class DoubleLinkedList:
         return return_list
 
     def __str__(self):
-        return (str(self.to_list()))
+        string = ""
+        self_list = self.to_list()
+        for item in self_list:
+            string += str(item)
+        return string
+
+    def __len__(self):
+        self.update()
+        return self.length
 
 class Text:
     def __init__(self, text="", container=list):
