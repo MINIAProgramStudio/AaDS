@@ -28,14 +28,18 @@ class DoubleLinkedList:
                         break
                 self.last_node = selected_node
 
+    loop_active = False
     def update(self):
         self.length = 0
         selected_node = self.first_node
-        while not selected_node is None:
-            self.length += 1
-            if selected_node.next is None:
+        self.loop_active = True
+        while self.loop_active:
+            if selected_node is None:
+                self.loop_active = False
                 break
-            selected_node = selected_node.next
+            else:
+                self.length += 1
+                selected_node = selected_node.next
         if self.last_node == self.first_node and self.length > 1:
             self.last_node = selected_node
 
@@ -57,22 +61,9 @@ class DoubleLinkedList:
             self.last_node = self.first_node
         else:
             node = Node(value)
-            self.last_node.next = node
-            node.previous = self.last_node
+            self.last_node.next, node.previous, = node, self.last_node
             node.next = None
             self.last_node = node
-        self.update()
-
-    def pop(self):
-        if self.length < 1:
-            self.update()
-        if self.length == 0 or self.last_node is None:
-            raise Exception("cannot pop from empty list")
-        popped_node = self.last_node
-        self.last_node = self.last_node.previous
-        self.last_node.next = None
-        self.update()
-        return popped_node
 
     def pull(self):
         if len(self) < 1:
@@ -82,12 +73,21 @@ class DoubleLinkedList:
         pulled_node = self.first_node
         self.first_node = self.first_node.next
         self.first_node.previous = None
-        self.update()
         return pulled_node
 
-    def pop(self, index):
-        if index == self.length - 1:
-            return self.pop()
+    def pop(self, index = 0):
+        self.update()
+        print(index)
+        if index >= self.length - 1:
+            if self.length < 1:
+                self.update()
+            if self.length == 0 or self.last_node is None:
+                raise Exception("cannot pop from empty list")
+            popped_node = self.last_node
+            self.last_node = self.last_node.previous
+            self.last_node.next = None
+            self.update()
+            return popped_node
         if index == 0:
             return self.pull()
         if index >= self.length:
@@ -97,16 +97,12 @@ class DoubleLinkedList:
             for i in range(0, index):
                 selected_node = selected_node.next
             selected_node.previous.next, selected_node.next.previous = selected_node.next, selected_node.previous
-            selected_node.next = None
-            selected_node.previous = None
         else:
             selected_node = self.last_node
-            for i in range(0, self.length - index):
+            for i in range(0, self.length - index - 1):
                 selected_node = selected_node.previous
+
             selected_node.previous.next, selected_node.next.previous = selected_node.next, selected_node.previous
-            selected_node.next = None
-            selected_node.previous = None
-        self.update()
         return selected_node
 
     def insert(self, value, index=0):
@@ -171,6 +167,14 @@ class DoubleLinkedList:
     def __len__(self):
         self.update()
         return self.length
+
+    def debug(self):
+        selected_node = self.first_node
+        while selected_node:
+            print([selected_node.previous, selected_node, selected_node.next])
+            if selected_node.next is None:
+                break
+            selected_node = selected_node.next
 
 class Text:
     def __init__(self, text="", container=list):
