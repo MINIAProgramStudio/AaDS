@@ -72,67 +72,73 @@ def task_2(input_text_class):
     # беремо перше слово з тексту
     first_word = Text("", input_text_class.contains.__class__)
     cursor_position = 0
+    while str(input_text_class.contains[cursor_position]) == str(" ") or str(input_text_class.contains[cursor_position]) == str("."):
+        cursor_position += 1
     while not(str(input_text_class.contains[cursor_position]) == str(" ") or str(input_text_class.contains[cursor_position]) == str(".") or cursor_position > len(input_text_class.contains)):
         first_word.contains.append(input_text_class.contains[cursor_position])
         cursor_position += 1
 
-    # чи є перше слово у тексті де слова співпадають з початковим відрізком алфавіту?
-    abc_includes_first_word = True
-    cursor_position = 0
-    while cursor_position < len(first_word.contains):
-        if not str(text_class.contains[cursor_position]) == str(first_word.contains[cursor_position]):
-            abc_includes_first_word = False
-            break
-        cursor_position += 1
-
     # видаляємо усі слова що співпадають з першим
-    if abc_includes_first_word:
-        cursor_position = 0
-        while cursor_position < len(text_class.contains):
-            # debug print([cursor_position,str(text_class.contains)])
+    cursor_position = 0
+    while cursor_position < len(text_class.contains):
+        print([cursor_position,str(text_class.contains)])
+        if str(text_class.contains[cursor_position]) == str(" ") or str(
+                text_class.contains[cursor_position]) == str("."):
+            # якщо пробіл або крапка -- скинути лічильник та пересунутись на 1 вправо
+            cursor_position += 1
+            counter = 0
+            continue
+        if counter >= len(first_word.contains):
+            # якщо довжина слова більше ніж довжина першого слова -- рухатись вправо
+            cursor_position += 1
+            continue
+
+        if str(text_class.contains[cursor_position]) == str(first_word.contains[counter]):
+            # якщо символ співпадає з першим словом -- пересунутись на 1 вправо і збільшити лічильник ал. пор. на 1
+            cursor_position += 1
+            counter += 1
+
             if str(text_class.contains[cursor_position]) == str(" ") or str(
                     text_class.contains[cursor_position]) == str("."):
-                # якщо пробіл або крапка -- скинути лічильник та пересунутись на 1 вправо
-                cursor_position += 1
-                counter = 0
-                continue
-            if counter >= len(first_word.contains):
-                # якщо довжина слова більше ніж довжина першого слова -- рухатись вправо
-                cursor_position += 1
-                continue
-
-            if str(text_class.contains[cursor_position]) == str(first_word.contains[counter]):
-                # якщо символ співпадає з першим словом -- пересунутись на 1 вправо і збільшити лічильник ал. пор. на 1
-                cursor_position += 1
-                counter += 1
-
-                if str(text_class.contains[cursor_position]) == str(" ") or str(
-                        text_class.contains[cursor_position]) == str("."):
-                    # якщо досягнуто кінця слова у цій гілці, значить слово співпадає з першим і його потрібно видалити
-                    # переміщення до початку слова
+                # якщо досягнуто кінця слова у цій гілці, значить слово співпадає з першим і його потрібно видалити
+                # переміщення до початку слова
+                cursor_position -= 1
+                while not (str(text_class.contains[cursor_position]) == str(" ") or str(
+                        text_class.contains[cursor_position]) == str(".") or cursor_position <= 0):
                     cursor_position -= 1
-                    while not (str(text_class.contains[cursor_position]) == str(" ") or str(
-                            text_class.contains[cursor_position]) == str(".") or cursor_position <= 0):
-                        cursor_position -= 1
-                    while str(text_class.contains[cursor_position]) == str(" ") or str(
-                            text_class.contains[cursor_position]) == str("."):
-                        cursor_position += 1
+                while str(text_class.contains[cursor_position]) == str(" ") or str(
+                        text_class.contains[cursor_position]) == str("."):
+                    cursor_position += 1
 
-                    # видалення слова
+                # видалення слова
 
-                    deleted = False
-                    while not deleted:
-                        if not (str(text_class.contains[cursor_position]) == str(" ") or str(
-                                text_class.contains[cursor_position]) == str(".")):
-                            text_class.contains.pop(cursor_position)
-                        else:
-                            deleted = True
-                    continue
+                deleted = False
+                while not deleted:
+                    if not (str(text_class.contains[cursor_position]) == str(" ") or str(
+                            text_class.contains[cursor_position]) == str(".")):
+                        text_class.contains.pop(cursor_position)
+                    else:
+                        deleted = True
                 continue
-            else:
-                #якщо символ не співпав з символо першого слова -- зашкалити лічильник, тим самим змусивши перехід на наступне слово.
-                counter = len(first_word.contains)
-                continue
+            continue
+        else:
+            #якщо символ не співпав з символо першого слова -- зашкалити лічильник, тим самим змусивши перехід на наступне слово.
+            counter = len(first_word.contains)
+            continue
+
+    # видалення останньої букви та дописання точки після усіх слів:
+    cursor_position = 0
+    was_in_word = False
+    while cursor_position < len(text_class.contains):
+        print([cursor_position, str(text_class.contains)])
+        if str(text_class.contains[cursor_position]) == str(" ") or str(text_class.contains[cursor_position]) == str("."):
+            if was_in_word:
+                text_class.contains[cursor_position-1].contains = "."
+
+            was_in_word = False
+        else:
+            was_in_word = True
+        cursor_position += 1
     return text_class
 
 
