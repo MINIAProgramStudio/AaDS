@@ -1,3 +1,5 @@
+import sys
+
 class Node:
     def __init__(self, contains, previous=None, next=None):
         self.contains = contains
@@ -77,7 +79,6 @@ class DoubleLinkedList:
 
     def pop(self, index = 0):
         self.update()
-        print(index)
         if index >= self.length - 1:
             if self.length < 1:
                 self.update()
@@ -137,7 +138,9 @@ class DoubleLinkedList:
         self.update()
 
     def __getitem__(self, item):
+
         if not isinstance(item, int) or item >= self.length:
+            print([item, self.length])
             raise Exception("index out of range")
         if item < self.length / 2:
             selected_node = self.first_node
@@ -176,8 +179,25 @@ class DoubleLinkedList:
                 break
             selected_node = selected_node.next
 
+    def __sizeof__(self):
+        size = 0
+        for i in range(len(self)):
+            size += sys.getsizeof(self[i])
+        return size
+
+
+
 class Text:
     def __init__(self, text="", container=list):
         self.contains = container()
         for symbol in text:
             self.contains.append(symbol)
+
+    def __str__(self):
+        string = ""
+        for i in range(len(self.contains)):
+            string += str(self.contains[i])
+        return string
+
+    def __sizeof__(self):
+        return sys.getsizeof(self.contains)

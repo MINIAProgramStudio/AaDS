@@ -1,5 +1,7 @@
 from text_handler import *
 from copy import copy
+import time
+import sys
 
 """
 Слова тексту із малих латинських літер записані не менше, ніж через один пробіл; текст закінчується крапкою.
@@ -23,7 +25,7 @@ def get_input():
                 all_good = False
                 break
         if symbol_not_in_alphabet:
-            print("Введено не допустимий символ")
+            print("Введено недопустимий символ")
             all_good = False
         if raw_text[-1] != ".":
             print("Текст має закінчуватись на крапку")
@@ -39,7 +41,6 @@ def task_2(input_text_class):
     counter = 0 # лічильник алфавітного порядку
     cursor_position = 0 # позиція каретки обробника даних
     while cursor_position < len(text_class.contains):
-        print([cursor_position,str(text_class.contains)])
         if str(text_class.contains[cursor_position]) == str(" ") or str(text_class.contains[cursor_position]) == str("."):
             # якщо пробіл або крапка -- скинути лічильник ал. пор. та пересунутись на 1 вправо
             cursor_position+=1
@@ -62,7 +63,6 @@ def task_2(input_text_class):
 
             deleted = False
             while not deleted:
-                print([cursor_position, str(text_class.contains)])
                 if str(text_class.contains[cursor_position]) == str(" ") or str(text_class.contains[cursor_position]) == str("."):
                     deleted = True
                 else:
@@ -81,7 +81,6 @@ def task_2(input_text_class):
     # видаляємо усі слова що співпадають з першим
     cursor_position = 0
     while cursor_position < len(text_class.contains):
-        print([cursor_position,str(text_class.contains)])
         if str(text_class.contains[cursor_position]) == str(" ") or str(
                 text_class.contains[cursor_position]) == str("."):
             # якщо пробіл або крапка -- скинути лічильник та пересунутись на 1 вправо
@@ -130,10 +129,12 @@ def task_2(input_text_class):
     cursor_position = 0
     was_in_word = False
     while cursor_position < len(text_class.contains):
-        print([cursor_position, str(text_class.contains)])
         if str(text_class.contains[cursor_position]) == str(" ") or str(text_class.contains[cursor_position]) == str("."):
             if was_in_word:
-                text_class.contains[cursor_position-1].contains = "."
+                if isinstance(text_class.contains, list):
+                    text_class.contains[cursor_position - 1] = "."
+                elif isinstance(text_class.contains, DoubleLinkedList):
+                    text_class.contains[cursor_position-1].contains = "."
 
             was_in_word = False
         else:
@@ -141,9 +142,28 @@ def task_2(input_text_class):
         cursor_position += 1
     return text_class
 
-
+print("Вас вітає програма обробки латинського тексту №2")
+print("Ця програма залишить лише слова що не співпадають з першим словом і співпадають з початковим відрізком алфавіту.")
+print("Також останні літери слів будуть видалені і до усіх слів буде дописано крапку")
 while True:
-    text_c = Text(get_input(),DoubleLinkedList)
+    text = get_input()
+    start = time.time()
+    text_c = Text(text,DoubleLinkedList)
+    result_DDL = str(task_2(text_c))
+    end = time.time()
+    DDL_time = end-start
+    DDL_memory = sys.getsizeof(text_c)
+
+    start = time.time()
+    text_c_l = Text(text, list)
+    result_list = str(task_2(text_c_l))
+    end = time.time()
+    list_time = end - start
+    list_memory = sys.getsizeof(text_c_l)
     print("Результат:")
-    print(str(task_2(text_c).contains))
+    print(str(result_DDL))
+    print("Час роботи двозв'язного списку: "+str(DDL_time))
+    print("Пам'ять використана двозв'язним списком: "+str(DDL_memory))
+    print("Час роботи динамічного масиву: " + str(list_time))
+    print("Пам'ять використана динамічним масивом: " + str(list_memory))
     print()
