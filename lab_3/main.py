@@ -17,6 +17,9 @@ def get_input():
     raw_text = ""
     while True:
         raw_text = input(">>>")
+        if raw_text == "":
+            print("Ви не ввели текст")
+            continue
         symbol_not_in_alphabet = False
         all_good = True
         for symbol in raw_text:
@@ -30,6 +33,7 @@ def get_input():
         if raw_text[-1] != ".":
             print("Текст має закінчуватись на крапку")
             all_good = False
+            break
         if all_good:
             break
     return raw_text
