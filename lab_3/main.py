@@ -26,16 +26,15 @@ def get_input():
             if symbol not in alphabet:
                 symbol_not_in_alphabet = True
                 all_good = False
-                break
         if symbol_not_in_alphabet:
             print("Введено недопустимий символ")
             all_good = False
         if raw_text[-1] != ".":
             print("Текст має закінчуватись на крапку")
             all_good = False
-            break
+            continue
         if all_good:
-            break
+            continue
     return raw_text
 
 def task_2(input_text_class):
