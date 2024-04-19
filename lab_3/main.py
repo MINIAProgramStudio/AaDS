@@ -34,7 +34,7 @@ def get_input():
             all_good = False
             continue
         if all_good:
-            continue
+            break
     return raw_text
 
 def task_2(input_text_class):
@@ -152,6 +152,7 @@ while True:
     text = get_input()
     start = time.time()
     text_c = Text(text,DoubleLinkedList)
+
     result_DDL = str(task_2(text_c))
     end = time.time()
     DDL_time = end-start
