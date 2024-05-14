@@ -85,18 +85,33 @@ class DoubleLinkedList:
             self.update()
         if self.length == 0 or self.first_node is None:
             raise Exception("cannot pull from empty list")
+        if self.length == 1:
+            pulled_node = self.first_node
+            self.frist_node = None
+            self.last_node = None
+            return pulled_node
         pulled_node = self.first_node
         self.first_node = self.first_node.next
         self.first_node.previous = None
         return pulled_node
 
-    def pop(self, index = 0):
+    def pop(self, index = -1):
+
         self.update()
+        if index < 0:
+            index += self.length
+        if index < 0:
+            raise Exception("index out of range")
         if index >= self.length - 1:
             if self.length < 1:
                 self.update()
             if self.length == 0 or self.last_node is None:
                 raise Exception("cannot pop from empty list")
+            if self.length == 1:
+                pulled_node = self.first_node
+                self.frist_node = None
+                self.last_node = None
+                return pulled_node
             popped_node = self.last_node
             self.last_node = self.last_node.previous
             self.last_node.next = None
