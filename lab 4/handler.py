@@ -11,6 +11,9 @@ class Stack:
         else:
             return None
 
+    def __str__(self):
+        return str(self.container)
+
 
 # нижче код з 3ої лабораторної роботи
 class Node:
@@ -189,11 +192,7 @@ class DoubleLinkedList:
         return return_list
 
     def __str__(self):
-        string = ""
-        self_list = self.to_list()
-        for item in self_list:
-            string += str(item)
-        return string
+        return str(self.to_list())
 
     def __len__(self):
         self.update()
