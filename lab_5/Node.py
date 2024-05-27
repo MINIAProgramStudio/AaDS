@@ -21,13 +21,9 @@ class Node:
                 self.left_arm = node
                 return
             else:
-                if self.value == value and self.right_arm is None:
-                    node = Node(value, self)
-                    self.right_arm = node
-                    return
-                else:
-                    self.left_arm.append(value)
-                    return
+                node = Node(value, self)
+                self.right_arm = node
+                return
         else:
             if self.right_arm is None:
                 node = Node(value, self)
