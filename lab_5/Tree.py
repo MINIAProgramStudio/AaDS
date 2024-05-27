@@ -21,30 +21,32 @@ class Tree:
             if selected_node is None:
                 return 0
 
-    def draw(self):
+    def draw(self, x_spacing = 25, y_spacing = 30):
         previous_level = []
         level = [self.root]
         level_counter = 0
         while True:
             # draw level
             turtle.penup()
-            turtle.goto(-15 * (len(level) - 1), level_counter * 15)
+            turtle.goto(-x_spacing * (len(level) - 1) / 2, -level_counter * y_spacing)
             for node in level:
                 if not node is None:
-                    turtle.write(node.value, align="center")
-                    turtle.setheading(90)
-                    turtle.forward(30)
+                    turtle.write(node.value, align="center",font=("Verdana",15, "normal"))
+                turtle.setheading(0)
+                turtle.forward(x_spacing)
+
 
             # draw connections
             for node in level:
                 if not node is None:
                     if not node.parent is None:
                         turtle.penup()
-                        turtle.goto(-15 * (len(level) - 1) + 30 * level.index(node), level_counter * 15)
+                        turtle.goto(-x_spacing * (len(level) - 1) / 2 + x_spacing * level.index(node), -level_counter * y_spacing)
                         turtle.pendown()
-                        turtle.goto(-15 * (len(previous_level) - 1) + 30 * previous_level.index(node.parent), level_counter * 15 - 15)
+                        turtle.goto(-x_spacing * (len(previous_level) - 1) / 2 + x_spacing * previous_level.index(node.parent), -level_counter * y_spacing + y_spacing)
 
             # iterate
+            level_counter += 1
             nodes_exist = False
             new_level = []
             for node in level:
@@ -55,8 +57,10 @@ class Tree:
                 else:
                     new_level.append(None)
                     new_level.append(None)
-            previous_level = level
-            level = new_level
-
+            previous_level = copy.copy(level)
+            level = copy.copy(new_level)
             if not nodes_exist:
                 return 0
+
+    def append(self, value):
+        self.root.append(value)

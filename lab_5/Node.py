@@ -15,15 +15,13 @@ class Node:
             return self.parent.depth() + 1
 
     def append(self, value):
-        if self.value >= value:
+        if self.value <= value:
             if self.left_arm is None:
                 node = Node(value, self)
                 self.left_arm = node
                 return
             else:
-                node = Node(value, self)
-                self.right_arm = node
-                return
+                self.left_arm.append(value)
         else:
             if self.right_arm is None:
                 node = Node(value, self)
