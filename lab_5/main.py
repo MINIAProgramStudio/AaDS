@@ -7,16 +7,20 @@
 
 from Node import Node
 from Tree import Tree
+from random import random
 
-test = Tree(5)
-test.append(1)
-test.append(2)
-test.append(3)
-test.append(4)
-test.append(6)
-test.append(7)
-test.append(8)
-test.append(9)
-test.append(10)
-test.draw()
+
+def random_tree(nodes_n, min=0, max=99):
+    width = max - min
+    tree = Tree(int(random() * width + min))
+    for n in range(nodes_n):
+        value = int(random() * width + min)
+        tree.append(value)
+    return tree
+
+
+test = random_tree(10)
+print(test.find_max())
+test.draw(35)
 input()
+
